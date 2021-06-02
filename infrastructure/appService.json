@@ -1,0 +1,50 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appService_ratuytsebot-appService-dev_name": {
+      "type": "string"
+    },
+    "appServicePlan_ASP-coherenttestresourcegroup-8acc_location": {
+      "type": "string"
+    },
+    "appServicePlan_ASP-coherenttestresourcegroup-8acc_name": {
+      "type": "string"
+    },
+    "appServicePlan_ASP-coherenttestresourcegroup-8acc_resourceGroup": {
+      "type": "string"
+    },
+    "currentStack": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "location": "[parameters('appServicePlan_ASP-coherenttestresourcegroup-8acc_location')]",
+      "name": "[parameters('appService_ratuytsebot-appService-dev_name')]",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-02-01",
+      "tags": {
+        "[concat('hidden-related:', resourceId(parameters('appServicePlan_ASP-coherenttestresourcegroup-8acc_resourceGroup'),'Microsoft.Web/serverfarms', parameters('appServicePlan_ASP-coherenttestresourcegroup-8acc_name')))]": "empty"
+      },
+      "kind": "app",
+      "properties": {
+        "name": "[parameters('appService_ratuytsebot-appService-dev_name')]",
+        "httpsOnly": true,
+        "reserved": false,
+        "serverFarmId": "[resourceId(parameters('appServicePlan_ASP-coherenttestresourcegroup-8acc_resourceGroup'),'Microsoft.Web/serverfarms', parameters('appServicePlan_ASP-coherenttestresourcegroup-8acc_name'))]",
+        "siteConfig": {
+          "metadata": [
+            {
+              "name": "CURRENT_STACK",
+              "value": "[parameters('currentStack')]"
+            }
+          ]
+        }
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      }
+    }
+  ]
+}
